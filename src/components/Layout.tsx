@@ -40,6 +40,7 @@ const Layout = ({ children }: LayoutProps) => {
     { path: "/", label: "Dashboard", icon: Home },
     { path: "/monthly", label: "Visão Mensal", icon: CalendarDays },
     { path: "/add", label: "Adicionar", icon: PlusCircle },
+    { path: "/investiments", label: "Investimentos", icon: Wallet },
     { path: "/installments", label: "Parcelamentos", icon: CreditCard },
     { path: "/categories", label: "Categorias", icon: Tags },
     { path: "/settings", label: "Configurações", icon: SettingsIcon },

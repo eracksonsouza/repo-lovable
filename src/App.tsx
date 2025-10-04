@@ -14,6 +14,7 @@ import MonthlyView from "./pages/MonthlyView";
 import Installments from "./pages/Installments";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import Investiments from "./pages/Investiments";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => (
                   <Route path="/add" element={<AddEntry />} />
                   <Route path="/monthly" element={<MonthlyView />} />
                   <Route path="/installments" element={<Installments />} />
+                  <Route path="/investiments" element={<Investiments />} />
                   <Route path="/categories" element={<Categories />} />
                   <Route path="/settings" element={<Settings />} />
                   <Route path="*" element={<NotFound />} />
