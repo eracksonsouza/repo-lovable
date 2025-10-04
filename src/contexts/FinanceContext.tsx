@@ -80,8 +80,146 @@ export const FinanceProvider = ({ children }: { children: ReactNode }) => {
 
   // Load data when user changes
   useEffect(() => {
+    const loadCategories = async () => {
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('categories')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('name');
+
+      if (error) {
+        console.error('Erro ao carregar categorias:', error);
+        return;
+      }
+
+      const formattedCategories: Category[] = data.map(cat => ({
+        id: cat.id,
+        name: cat.name,
+        color: cat.color,
+        icon: cat.icon,
+      }));
+
+      setCategories(formattedCategories);
+    };
+
+    const loadIncomes = async () => {
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('incomes')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('date', { ascending: false });
+
+      if (error) {
+        console.error('Erro ao carregar receitas:', error);
+        return;
+      }
+
+      const formattedIncomes: Income[] = data.map(income => ({
+        id: income.id,
+        date: income.date,
+        amount: parseFloat(income.amount),
+        description: income.description,
+        createdAt: income.created_at,
+      }));
+
+      setIncomes(formattedIncomes);
+    };
+
+    const loadExpenses = async () => {
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('expenses')
+        .select(`
+          *,
+          categories (name)
+        `)
+        .eq('user_id', user.id)
+        .order('date', { ascending: false });
+
+      if (error) {
+        console.error('Erro ao carregar despesas:', error);
+        return;
+      }
+
+      const formattedExpenses: Expense[] = data.map(expense => ({
+        id: expense.id,
+        date: expense.date,
+        amount: parseFloat(expense.amount),
+        description: expense.description,
+        category: expense.categories?.name || 'Sem categoria',
+        isInstallment: expense.is_installment || false,
+        installmentId: expense.installment_id,
+        createdAt: expense.created_at,
+      }));
+
+      setExpenses(formattedExpenses);
+      setAllExpenses(formattedExpenses);
+    };
+
+    const loadInstallments = async () => {
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('installments')
+        .select(`
+          *,
+          categories (name)
+        `)
+        .eq('user_id', user.id)
+        .order('start_date', { ascending: false });
+
+      if (error) {
+        console.error('Erro ao carregar parcelamentos:', error);
+        return;
+      }
+
+      const formattedInstallments: Installment[] = data.map(installment => ({
+        id: installment.id,
+        name: installment.name,
+        totalAmount: parseFloat(installment.total_amount),
+        installments: installment.installments,
+        monthlyAmount: parseFloat(installment.monthly_amount),
+        paidInstallments: installment.paid_installments,
+        startDate: installment.start_date,
+        category: installment.categories?.name || 'Sem categoria',
+        createdAt: installment.created_at,
+      }));
+
+      setInstallments(formattedInstallments);
+      
+      // Add month info for allInstallments
+      const installmentsWithMonth = formattedInstallments.map(inst => ({
+        ...inst,
+        month: getMonthKeyFromDate(inst.startDate),
+      }));
+      setAllInstallments(installmentsWithMonth);
+    };
+
+    const loadData = async () => {
+      if (!user) return;
+
+      setLoading(true);
+      try {
+        await Promise.all([
+          loadCategories(),
+          loadExpenses(),
+          loadIncomes(),
+          loadInstallments(),
+        ]);
+      } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (user) {
-      loadAllData();
+      loadData();
     } else {
       // Clear data when user logs out
       setCategories([]);
@@ -94,143 +232,7 @@ export const FinanceProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [user]);
 
-  const loadAllData = async () => {
-    if (!user) return;
 
-    setLoading(true);
-    try {
-      await Promise.all([
-        loadCategories(),
-        loadExpenses(),
-        loadIncomes(),
-        loadInstallments(),
-      ]);
-    } catch (error) {
-      console.error('Erro ao carregar dados:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadCategories = async () => {
-    if (!user) return;
-
-    const { data, error } = await supabase
-      .from('categories')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('name');
-
-    if (error) {
-      console.error('Erro ao carregar categorias:', error);
-      return;
-    }
-
-    const formattedCategories: Category[] = data.map(cat => ({
-      id: cat.id,
-      name: cat.name,
-      color: cat.color,
-      icon: cat.icon,
-    }));
-
-    setCategories(formattedCategories);
-  };
-
-  const loadIncomes = async () => {
-    if (!user) return;
-
-    const { data, error } = await supabase
-      .from('incomes')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('date', { ascending: false });
-
-    if (error) {
-      console.error('Erro ao carregar receitas:', error);
-      return;
-    }
-
-    const formattedIncomes: Income[] = data.map(income => ({
-      id: income.id,
-      date: income.date,
-      amount: parseFloat(income.amount),
-      description: income.description,
-      createdAt: income.created_at,
-    }));
-
-    setIncomes(formattedIncomes);
-  };
-
-  const loadExpenses = async () => {
-    if (!user) return;
-
-    const { data, error } = await supabase
-      .from('expenses')
-      .select(`
-        *,
-        categories (name)
-      `)
-      .eq('user_id', user.id)
-      .order('date', { ascending: false });
-
-    if (error) {
-      console.error('Erro ao carregar despesas:', error);
-      return;
-    }
-
-    const formattedExpenses: Expense[] = data.map(expense => ({
-      id: expense.id,
-      date: expense.date,
-      amount: parseFloat(expense.amount),
-      description: expense.description,
-      category: expense.categories?.name || 'Sem categoria',
-      isInstallment: expense.is_installment || false,
-      installmentId: expense.installment_id,
-      createdAt: expense.created_at,
-    }));
-
-    setExpenses(formattedExpenses);
-    setAllExpenses(formattedExpenses);
-  };
-
-  const loadInstallments = async () => {
-    if (!user) return;
-
-    const { data, error } = await supabase
-      .from('installments')
-      .select(`
-        *,
-        categories (name)
-      `)
-      .eq('user_id', user.id)
-      .order('start_date', { ascending: false });
-
-    if (error) {
-      console.error('Erro ao carregar parcelamentos:', error);
-      return;
-    }
-
-    const formattedInstallments: Installment[] = data.map(installment => ({
-      id: installment.id,
-      name: installment.name,
-      totalAmount: parseFloat(installment.total_amount),
-      installments: installment.installments,
-      monthlyAmount: parseFloat(installment.monthly_amount),
-      paidInstallments: installment.paid_installments,
-      startDate: installment.start_date,
-      category: installment.categories?.name || 'Sem categoria',
-      createdAt: installment.created_at,
-    }));
-
-    setInstallments(formattedInstallments);
-    
-    // Add month info for allInstallments
-    const installmentsWithMonth = formattedInstallments.map(inst => ({
-      ...inst,
-      month: getMonthKeyFromDate(inst.startDate),
-    }));
-    setAllInstallments(installmentsWithMonth);
-  };
 
   // Filtered data based on selected month
   const currentMonthIncomes = useMemo(() => {
@@ -532,8 +534,13 @@ export const FinanceProvider = ({ children }: { children: ReactNode }) => {
       supabase.from('categories').delete().eq('user_id', user.id),
     ]);
 
-    // Reload data
-    await loadAllData();
+    // Clear local state
+    setCategories([]);
+    setIncomes([]);
+    setExpenses([]);
+    setInstallments([]);
+    setAllExpenses([]);
+    setAllInstallments([]);
   }, [user]);
 
   const contextValue: FinanceContextType = {
