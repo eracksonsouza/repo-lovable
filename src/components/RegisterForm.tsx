@@ -11,7 +11,15 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Alert, AlertDescription } from "./ui/alert";
-import { Mail, Lock, Wallet, Eye, EyeOff, CheckCircle, UserPlus } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  Wallet,
+  Eye,
+  EyeOff,
+  CheckCircle,
+  UserPlus,
+} from "lucide-react";
 
 interface RegisterFormProps {
   onToggleMode: () => void;
@@ -81,10 +89,11 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleMode }) => {
               <Alert className="border-green-200 bg-green-50 dark:bg-green-950/50">
                 <CheckCircle className="h-4 w-4 text-green-600" />
                 <AlertDescription className="text-green-700 dark:text-green-400">
-                  Clique no link no seu email para ativar sua conta, depois volte aqui para fazer login.
+                  Clique no link no seu email para ativar sua conta, depois
+                  volte aqui para fazer login.
                 </AlertDescription>
               </Alert>
-              
+
               <Button
                 onClick={onToggleMode}
                 className="w-full h-12 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold shadow-lg transition-all duration-200 transform hover:scale-[1.02]"
@@ -126,7 +135,10 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleMode }) => {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
-                <Alert variant="destructive" className="border-red-200 bg-red-50 dark:bg-red-950/50">
+                <Alert
+                  variant="destructive"
+                  className="border-red-200 bg-red-50 dark:bg-red-950/50"
+                >
                   <AlertDescription className="text-red-700 dark:text-red-400">
                     {error}
                   </AlertDescription>
@@ -134,7 +146,10 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleMode }) => {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <Label
+                  htmlFor="email"
+                  className="text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
                   Email
                 </Label>
                 <div className="relative">
@@ -152,7 +167,10 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleMode }) => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <Label
+                  htmlFor="password"
+                  className="text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
                   Senha
                 </Label>
                 <div className="relative">
@@ -181,7 +199,10 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleMode }) => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <Label
+                  htmlFor="confirmPassword"
+                  className="text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
                   Confirmar Senha
                 </Label>
                 <div className="relative">
@@ -209,9 +230,9 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleMode }) => {
                 </div>
               </div>
 
-              <Button 
-                type="submit" 
-                className="w-full h-12 bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-semibold shadow-lg transition-all duration-200 transform hover:scale-[1.02]" 
+              <Button
+                type="submit"
+                className="w-full h-12 bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-semibold shadow-lg transition-all duration-200 transform hover:scale-[1.02]"
                 disabled={loading}
               >
                 {loading ? (

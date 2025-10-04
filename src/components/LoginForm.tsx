@@ -65,7 +65,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onToggleMode }) => {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
-                <Alert variant="destructive" className="border-red-200 bg-red-50 dark:bg-red-950/50">
+                <Alert
+                  variant="destructive"
+                  className="border-red-200 bg-red-50 dark:bg-red-950/50"
+                >
                   <AlertDescription className="text-red-700 dark:text-red-400">
                     {error}
                   </AlertDescription>
@@ -73,7 +76,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onToggleMode }) => {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <Label
+                  htmlFor="email"
+                  className="text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
                   Email
                 </Label>
                 <div className="relative">
@@ -91,7 +97,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onToggleMode }) => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <Label
+                  htmlFor="password"
+                  className="text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
                   Senha
                 </Label>
                 <div className="relative">
@@ -119,9 +128,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onToggleMode }) => {
                 </div>
               </div>
 
-              <Button 
-                type="submit" 
-                className="w-full h-12 bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-semibold shadow-lg transition-all duration-200 transform hover:scale-[1.02]" 
+              <Button
+                type="submit"
+                className="w-full h-12 bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-semibold shadow-lg transition-all duration-200 transform hover:scale-[1.02]"
                 disabled={loading}
               >
                 {loading ? (
