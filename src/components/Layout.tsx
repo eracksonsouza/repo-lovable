@@ -23,6 +23,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { FloatingChat } from "./FloatingChat";
 
 interface LayoutProps {
   children: ReactNode;
@@ -120,6 +121,7 @@ const Layout = ({ children }: LayoutProps) => {
           </div>
         </div>
       </div>
+      <FloatingChat />
     </div>
   );
 };
